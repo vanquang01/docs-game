@@ -6,19 +6,19 @@ Tài liệu này tổng hợp các kiến thức về các hệ thống quan tr�
 
 ## 📋 Mục Lục
 
-0. [Sơ Đồ Architecture](#0-sơ-đồ-architecture-kiến-trúc-hệ-thống)
-1. [Singleton Pattern](#1-singleton-pattern-mẫu-singleton)
-2. [Manager Systems](#2-manager-systems-hệ-thống-quản-lý)
-3. [Event System](#3-event-system-hệ-thống-sự-kiện)
-4. [Save/Load System](#4-saveload-system-hệ-thống-lưutải)
-5. [Object Pooling](#5-object-pooling-nhóm-đối-tượng)
-6. [Audio System](#6-audio-system-hệ-thống-âm-thanh)
-7. [Firebase Analytics](#7-firebase-analytics-phân-tích-firebase)
-8. [AdMob (Quảng cáo)](#8-admob-quảng-cáo)
+1. [Sơ Đồ Architecture](#0-sơ-đồ-architecture-kiến-trúc-hệ-thống)
+2. [Singleton Pattern](#1-singleton-pattern-mẫu-singleton)
+3. [Manager Systems](#2-manager-systems-hệ-thống-quản-lý)
+4. [Event System](#3-event-system-hệ-thống-sự-kiện)
+5. [Save/Load System](#4-saveload-system-hệ-thống-lưutải)
+6. [Object Pooling](#5-object-pooling-nhóm-đối-tượng)
+7. [Audio System](#6-audio-system-hệ-thống-âm-thanh)
+8. [Firebase Analytics](#7-firebase-analytics-phân-tích-firebase)
+9. [AdMob (Quảng cáo)](#8-admob-quảng-cáo)
 
 ---
 
-## 0. Sơ Đồ Architecture (Kiến Trúc Hệ Thống)
+## 1. Sơ Đồ Architecture (Kiến Trúc Hệ Thống)
 
 Sơ đồ dưới đây mô tả mối quan hệ và luồng giao tiếp giữa các hệ thống trong game:
 
@@ -201,7 +201,7 @@ Enemy.OnDeath()
 
 ---
 
-## 1. Singleton Pattern (Mẫu Singleton)
+## 2. Singleton Pattern (Mẫu Singleton)
 
 Singleton Pattern đảm bảo chỉ có một instance duy nhất của class trong toàn bộ ứng dụng.
 
@@ -258,7 +258,7 @@ public class GameStateManager : MonoBehaviour
 
 ---
 
-## 2. Manager Systems (Hệ thống Quản lý)
+## 3. Manager Systems (Hệ thống Quản lý)
 
 Manager Systems là các class tập trung hóa logic quản lý một phần cụ thể của game.
 
@@ -291,7 +291,7 @@ public class GameStateManager : MonoBehaviour
 
 ---
 
-## 3. Event System (Hệ thống Sự kiện)
+## 4. Event System (Hệ thống Sự kiện)
 
 Event System giúp các component giao tiếp với nhau mà không cần phụ thuộc trực tiếp vào nhau (loose coupling).
 
@@ -380,7 +380,7 @@ public class EventManager : MonoBehaviour
 
 ---
 
-## 4. Save/Load System (Hệ thống Lưu/Tải)
+## 5. Save/Load System (Hệ thống Lưu/Tải)
 
 ### A. PlayerPrefs (Đơn giản, dữ liệu nhỏ)
 
@@ -570,7 +570,7 @@ public class SaveManager : MonoBehaviour
 
 ---
 
-## 5. Object Pooling (Nhóm Đối tượng)
+## 6. Object Pooling (Nhóm Đối tượng)
 
 Object Pooling là kỹ thuật tái sử dụng object thay vì tạo mới và xóa liên tục, giúp giảm Garbage Collection và tăng hiệu năng.
 
@@ -696,7 +696,7 @@ ObjectPool.Instance.ReturnToPool("Bullet", bullet);
 
 ---
 
-## 6. Audio System (Hệ thống Âm thanh)
+## 7. Audio System (Hệ thống Âm thanh)
 
 Audio System quản lý tất cả âm thanh trong game một cách tập trung.
 
@@ -872,7 +872,7 @@ AudioManager.Instance.Stop("BackgroundMusic");
 
 ---
 
-## 7. Firebase Analytics (Phân tích Firebase)
+## 8. Firebase Analytics (Phân tích Firebase)
 
 Firebase Analytics giúp theo dõi hành vi người chơi và hiệu năng game.
 
@@ -1039,7 +1039,7 @@ FirebaseAnalyticsManager.Instance.SetUserProperty("player_level", "10");
 
 ---
 
-## 8. AdMob (Quảng cáo)
+## 9. AdMob (Quảng cáo)
 
 AdMob là nền tảng quảng cáo của Google, giúp kiếm doanh thu từ game thông qua hiển thị quảng cáo.
 
