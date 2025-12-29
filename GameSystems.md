@@ -30,7 +30,7 @@ graph TB
         GS[GameStateManager<br/>Singleton]
         ET[Event System]
     end
-    
+
     subgraph "Manager Layer"
         GT[GameTimerManager]
         AM[AudioManager]
@@ -38,61 +38,61 @@ graph TB
         PM[PoolManager]
         UI[UIManager]
     end
-    
+
     subgraph "Game Components"
         PC[Player Controller]
         EN[Enemy Spawner]
         BL[Bullet System]
         PR[Player Resources]
     end
-    
+
     subgraph "External Services"
         FA[Firebase Analytics]
         AD[AdMob Manager]
     end
-    
+
     subgraph "Data Layer"
         PP[PlayerPrefs]
         JSON[JSON Files]
     end
-    
+
     GS -->|Events| ET
     GS -->|State Change| GT
     GS -->|State Change| UI
     GS -->|State Change| AM
-    
+
     ET -->|Subscribe| GT
     ET -->|Subscribe| UI
     ET -->|Subscribe| PC
     ET -->|Subscribe| EN
-    
+
     PC -->|Spawn| PM
     EN -->|Spawn| PM
     BL -->|Spawn| PM
-    
+
     PM -->|Reuse Objects| PC
     PM -->|Reuse Objects| EN
     PM -->|Reuse Objects| BL
-    
+
     AM -->|Play Sound| PC
     AM -->|Play Sound| EN
     AM -->|Play Sound| UI
-    
+
     SM -->|Save| PP
     SM -->|Save| JSON
     SM -->|Load| PP
     SM -->|Load| JSON
-    
+
     PR -->|Save Data| SM
     UI -->|Save Settings| SM
-    
+
     PC -->|Log Events| FA
     UI -->|Log Events| FA
     PR -->|Log Events| FA
-    
+
     UI -->|Show Ads| AD
     PR -->|Reward| AD
-    
+
     AD -->|Reward Event| PR
     AD -->|Ad Closed Event| UI
 ```
@@ -108,14 +108,14 @@ sequenceDiagram
     participant AM as AudioManager
     participant SM as SaveManager
     participant FA as Firebase Analytics
-    
+
     Player->>UI: Click Start Button
     UI->>GS: ChangeState(Playing)
     GS->>ET: Invoke OnGameStateChanged
     ET->>AM: Play Background Music
     ET->>UI: Update UI State
     GS->>FA: LogEvent("game_start")
-    
+
     Player->>UI: Game Over
     UI->>GS: ChangeState(GameOver)
     GS->>ET: Invoke OnGameStateChanged
@@ -127,25 +127,30 @@ sequenceDiagram
 ### Mô Tả Kiến Trúc
 
 #### 1. **Lớp Core (Lõi)**
+
 - **GameStateManager**: Quản lý trạng thái game toàn cục, là trung tâm điều phối
 - **Event System**: Hệ thống sự kiện cho phép các component giao tiếp mà không phụ thuộc trực tiếp
 
 #### 2. **Lớp Manager (Quản Lý)**
+
 - Các Manager sử dụng **Singleton Pattern** để truy cập global
 - Giao tiếp với nhau thông qua **Event System** để giảm coupling
 - Mỗi Manager có trách nhiệm riêng biệt (Single Responsibility)
 
 #### 3. **Lớp Game Components (Thành Phần Game)**
+
 - Player, Enemy, Bullet, v.v. sử dụng **Object Pooling** để tối ưu hiệu năng
 - Lắng nghe events từ Event System để phản ứng với thay đổi game state
 - Gọi trực tiếp các Manager khi cần (AudioManager, PoolManager)
 
 #### 4. **Lớp Data (Dữ Liệu)**
+
 - **SaveManager** quản lý việc lưu/tải dữ liệu
 - Sử dụng **PlayerPrefs** cho dữ liệu đơn giản (settings, high score)
 - Sử dụng **JSON Files** cho dữ liệu phức tạp (inventory, progress)
 
 #### 5. **Lớp External Services (Dịch Vụ Bên Ngoài)**
+
 - **Firebase Analytics**: Log events từ các hệ thống khác
 - **AdMob Manager**: Hiển thị quảng cáo, phát events khi có reward
 
@@ -174,7 +179,7 @@ sequenceDiagram
 **Khi người chơi bắt đầu level:**
 
 ```
-Player Click "Start" 
+Player Click "Start"
   → UIManager.OnStartButtonClick()
   → GameStateManager.ChangeState(Playing)
   → GameStateManager phát event OnGameStateChanged
@@ -223,11 +228,13 @@ public class GameStateManager : MonoBehaviour
 ```
 
 ### Ưu điểm:
-- ✅ Truy cập global dễ dàng: `GameStateManager.Instance.ChangeState(...)`
-- ✅ Đảm bảo chỉ có một instance
-- ✅ Dễ quản lý state toàn cục
+
+- Truy cập global dễ dàng: `GameStateManager.Instance.ChangeState(...)`
+- Đảm bảo chỉ có một instance
+- Dễ quản lý state toàn cục
 
 ### Nhược điểm:
+
 - ❌ Khó test
 - ❌ Có thể tạo dependency chặt
 - ❌ Cần cẩn thận với thread safety
@@ -334,9 +341,9 @@ GameStateManager.Instance.OnGameStateChanged -= OnGameStateChanged;
 public class EventManager : MonoBehaviour
 {
     public static EventManager Instance;
-    
+
     private Dictionary<string, Action<object>> events = new Dictionary<string, Action<object>>();
-    
+
     void Awake()
     {
         if (Instance == null)
@@ -349,20 +356,20 @@ public class EventManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    
+
     public void Subscribe(string eventName, Action<object> callback)
     {
         if (!events.ContainsKey(eventName))
             events[eventName] = null;
         events[eventName] += callback;
     }
-    
+
     public void Unsubscribe(string eventName, Action<object> callback)
     {
         if (events.ContainsKey(eventName))
             events[eventName] -= callback;
     }
-    
+
     public void Publish(string eventName, object data = null)
     {
         if (events.ContainsKey(eventName))
@@ -383,7 +390,7 @@ PlayerPrefs phù hợp cho việc lưu settings, high score, và các dữ liệ
 public class SaveManager : MonoBehaviour
 {
     public static SaveManager Instance;
-    
+
     void Awake()
     {
         if (Instance == null)
@@ -396,48 +403,48 @@ public class SaveManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    
+
     // Lưu dữ liệu
     public void SaveInt(string key, int value)
     {
         PlayerPrefs.SetInt(key, value);
         PlayerPrefs.Save();
     }
-    
+
     public void SaveFloat(string key, float value)
     {
         PlayerPrefs.SetFloat(key, value);
         PlayerPrefs.Save();
     }
-    
+
     public void SaveString(string key, string value)
     {
         PlayerPrefs.SetString(key, value);
         PlayerPrefs.Save();
     }
-    
+
     // Tải dữ liệu
     public int LoadInt(string key, int defaultValue = 0)
     {
         return PlayerPrefs.GetInt(key, defaultValue);
     }
-    
+
     public float LoadFloat(string key, float defaultValue = 0f)
     {
         return PlayerPrefs.GetFloat(key, defaultValue);
     }
-    
+
     public string LoadString(string key, string defaultValue = "")
     {
         return PlayerPrefs.GetString(key, defaultValue);
     }
-    
+
     // Xóa dữ liệu
     public void DeleteKey(string key)
     {
         PlayerPrefs.DeleteKey(key);
     }
-    
+
     public void DeleteAll()
     {
         PlayerPrefs.DeleteAll();
@@ -469,7 +476,7 @@ public class SaveManager : MonoBehaviour
 {
     public static SaveManager Instance;
     private string savePath;
-    
+
     void Awake()
     {
         if (Instance == null)
@@ -481,11 +488,11 @@ public class SaveManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        
+
         // Đường dẫn lưu file
         savePath = Application.persistentDataPath + "/savegame.json";
     }
-    
+
     // Lưu dữ liệu
     public void SaveGame(GameData data)
     {
@@ -500,7 +507,7 @@ public class SaveManager : MonoBehaviour
             Debug.LogError($"Error saving game: {e.Message}");
         }
     }
-    
+
     // Tải dữ liệu
     public GameData LoadGame()
     {
@@ -525,13 +532,13 @@ public class SaveManager : MonoBehaviour
             return new GameData();
         }
     }
-    
+
     // Kiểm tra file save có tồn tại không
     public bool HasSaveFile()
     {
         return File.Exists(savePath);
     }
-    
+
     // Xóa file save
     public void DeleteSave()
     {
@@ -546,14 +553,14 @@ public class SaveManager : MonoBehaviour
 
 ### So sánh PlayerPrefs vs JSON:
 
-| Đặc điểm | PlayerPrefs | JSON Save |
-|----------|-------------|-----------|
-| **Độ phức tạp** | Đơn giản | Phức tạp hơn |
-| **Loại dữ liệu** | Chỉ int, float, string | Bất kỳ object nào |
-| **Hiệu năng** | Nhanh | Chậm hơn một chút |
-| **Bảo mật** | Dễ chỉnh sửa | Dễ chỉnh sửa (có thể mã hóa) |
-| **Kích thước** | Giới hạn (~1MB) | Không giới hạn |
-| **Sử dụng** | Settings, high score | Game data phức tạp |
+| Đặc điểm         | PlayerPrefs            | JSON Save                    |
+| ---------------- | ---------------------- | ---------------------------- |
+| **Độ phức tạp**  | Đơn giản               | Phức tạp hơn                 |
+| **Loại dữ liệu** | Chỉ int, float, string | Bất kỳ object nào            |
+| **Hiệu năng**    | Nhanh                  | Chậm hơn một chút            |
+| **Bảo mật**      | Dễ chỉnh sửa           | Dễ chỉnh sửa (có thể mã hóa) |
+| **Kích thước**   | Giới hạn (~1MB)        | Không giới hạn               |
+| **Sử dụng**      | Settings, high score   | Game data phức tạp           |
 
 ### Lưu ý:
 
@@ -570,7 +577,7 @@ Object Pooling là kỹ thuật tái sử dụng object thay vì tạo mới và
 ### Tại sao cần Object Pooling?
 
 - ❌ **Vấn đề**: `Instantiate()` và `Destroy()` tạo ra Garbage Collection, gây lag
-- ✅ **Giải pháp**: Tái sử dụng object đã tạo, chỉ activate/deactivate
+- **Giải pháp**: Tái sử dụng object đã tạo, chỉ activate/deactivate
 
 ### Triển khai cơ bản:
 
@@ -587,11 +594,11 @@ public class ObjectPool : MonoBehaviour
         public GameObject prefab;
         public int size;
     }
-    
+
     public static ObjectPool Instance;
     public List<Pool> pools;
     private Dictionary<string, Queue<GameObject>> poolDictionary;
-    
+
     void Awake()
     {
         if (Instance == null)
@@ -603,27 +610,27 @@ public class ObjectPool : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    
+
     void Start()
     {
         poolDictionary = new Dictionary<string, Queue<GameObject>>();
-        
+
         // Khởi tạo các pool
         foreach (Pool pool in pools)
         {
             Queue<GameObject> objectPool = new Queue<GameObject>();
-            
+
             for (int i = 0; i < pool.size; i++)
             {
                 GameObject obj = Instantiate(pool.prefab);
                 obj.SetActive(false);
                 objectPool.Enqueue(obj);
             }
-            
+
             poolDictionary.Add(pool.tag, objectPool);
         }
     }
-    
+
     // Lấy object từ pool
     public GameObject SpawnFromPool(string tag, Vector3 position, Quaternion rotation)
     {
@@ -632,22 +639,22 @@ public class ObjectPool : MonoBehaviour
             Debug.LogWarning($"Pool with tag {tag} doesn't exist!");
             return null;
         }
-        
+
         GameObject objectToSpawn = poolDictionary[tag].Dequeue();
-        
+
         objectToSpawn.SetActive(true);
         objectToSpawn.transform.position = position;
         objectToSpawn.transform.rotation = rotation;
-        
+
         // Gọi method OnObjectSpawn nếu có
         IPooledObject pooledObj = objectToSpawn.GetComponent<IPooledObject>();
         pooledObj?.OnObjectSpawn();
-        
+
         poolDictionary[tag].Enqueue(objectToSpawn);
-        
+
         return objectToSpawn;
     }
-    
+
     // Trả object về pool
     public void ReturnToPool(string tag, GameObject obj)
     {
@@ -675,10 +682,10 @@ ObjectPool.Instance.ReturnToPool("Bullet", bullet);
 
 ### Ưu điểm:
 
-- ✅ Giảm Garbage Collection (GC)
-- ✅ Tăng hiệu năng đáng kể
-- ✅ Kiểm soát số lượng object
-- ✅ Tái sử dụng object hiệu quả
+- Giảm Garbage Collection (GC)
+- Tăng hiệu năng đáng kể
+- Kiểm soát số lượng object
+- Tái sử dụng object hiệu quả
 
 ### Khi nào nên dùng:
 
@@ -710,7 +717,7 @@ public class Sound
     public float pitch = 1f;
     public bool loop = false;
     public bool playOnAwake = false;
-    
+
     [HideInInspector]
     public AudioSource source;
 }
@@ -718,14 +725,14 @@ public class Sound
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
-    
+
     [Header("Audio Settings")]
     public Sound[] sounds;
     public float masterVolume = 1f;
     public bool muteAll = false;
-    
+
     private Dictionary<string, Sound> soundDictionary;
-    
+
     void Awake()
     {
         if (Instance == null)
@@ -738,9 +745,9 @@ public class AudioManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-        
+
         soundDictionary = new Dictionary<string, Sound>();
-        
+
         // Khởi tạo AudioSource cho mỗi sound
         foreach (Sound s in sounds)
         {
@@ -750,16 +757,16 @@ public class AudioManager : MonoBehaviour
             s.source.pitch = s.pitch;
             s.source.loop = s.loop;
             s.source.playOnAwake = s.playOnAwake;
-            
+
             soundDictionary[s.name] = s;
         }
     }
-    
+
     // Phát âm thanh
     public void Play(string soundName)
     {
         if (muteAll) return;
-        
+
         if (soundDictionary.ContainsKey(soundName))
         {
             soundDictionary[soundName].source.Play();
@@ -769,7 +776,7 @@ public class AudioManager : MonoBehaviour
             Debug.LogWarning($"Sound: {soundName} not found!");
         }
     }
-    
+
     // Dừng âm thanh
     public void Stop(string soundName)
     {
@@ -778,7 +785,7 @@ public class AudioManager : MonoBehaviour
             soundDictionary[soundName].source.Stop();
         }
     }
-    
+
     // Tạm dừng
     public void Pause(string soundName)
     {
@@ -787,7 +794,7 @@ public class AudioManager : MonoBehaviour
             soundDictionary[soundName].source.Pause();
         }
     }
-    
+
     // Tiếp tục
     public void Unpause(string soundName)
     {
@@ -796,7 +803,7 @@ public class AudioManager : MonoBehaviour
             soundDictionary[soundName].source.UnPause();
         }
     }
-    
+
     // Điều chỉnh volume
     public void SetVolume(string soundName, float volume)
     {
@@ -806,29 +813,29 @@ public class AudioManager : MonoBehaviour
             soundDictionary[soundName].source.volume = soundDictionary[soundName].volume * masterVolume;
         }
     }
-    
+
     // Điều chỉnh master volume
     public void SetMasterVolume(float volume)
     {
         masterVolume = Mathf.Clamp01(volume);
-        
+
         foreach (Sound s in sounds)
         {
             s.source.volume = s.volume * masterVolume;
         }
     }
-    
+
     // Tắt/bật tất cả
     public void SetMuteAll(bool mute)
     {
         muteAll = mute;
-        
+
         foreach (Sound s in sounds)
         {
             s.source.mute = mute;
         }
     }
-    
+
     // Kiểm tra đang phát
     public bool IsPlaying(string soundName)
     {
@@ -885,9 +892,9 @@ using Firebase.Analytics;
 public class FirebaseAnalyticsManager : MonoBehaviour
 {
     public static FirebaseAnalyticsManager Instance;
-    
+
     private bool isInitialized = false;
-    
+
     void Awake()
     {
         if (Instance == null)
@@ -901,7 +908,7 @@ public class FirebaseAnalyticsManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    
+
     void InitializeFirebase()
     {
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
@@ -910,7 +917,7 @@ public class FirebaseAnalyticsManager : MonoBehaviour
             {
                 isInitialized = true;
                 Debug.Log("Firebase initialized successfully!");
-                
+
                 // Log event khởi động
                 LogEvent("game_start");
             }
@@ -920,32 +927,32 @@ public class FirebaseAnalyticsManager : MonoBehaviour
             }
         });
     }
-    
+
     // Log event đơn giản
     public void LogEvent(string eventName)
     {
         if (!isInitialized) return;
-        
+
         FirebaseAnalytics.LogEvent(eventName);
         Debug.Log($"Firebase Event: {eventName}");
     }
-    
+
     // Log event với tham số
     public void LogEvent(string eventName, string parameterName, string parameterValue)
     {
         if (!isInitialized) return;
-        
+
         FirebaseAnalytics.LogEvent(eventName, parameterName, parameterValue);
     }
-    
+
     // Log event với nhiều tham số
     public void LogEvent(string eventName, Dictionary<string, object> parameters)
     {
         if (!isInitialized) return;
-        
+
         FirebaseAnalytics.LogEvent(eventName, parameters);
     }
-    
+
     // Log level start
     public void LogLevelStart(int level)
     {
@@ -954,7 +961,7 @@ public class FirebaseAnalyticsManager : MonoBehaviour
             { "level", level }
         });
     }
-    
+
     // Log level complete
     public void LogLevelComplete(int level, float time)
     {
@@ -964,7 +971,7 @@ public class FirebaseAnalyticsManager : MonoBehaviour
             { "time", time }
         });
     }
-    
+
     // Log purchase
     public void LogPurchase(string itemId, string itemName, float value, string currency = "USD")
     {
@@ -976,26 +983,26 @@ public class FirebaseAnalyticsManager : MonoBehaviour
             { "currency", currency }
         });
     }
-    
+
     // Log screen view
     public void LogScreenView(string screenName)
     {
         LogEvent("screen_view", "screen_name", screenName);
     }
-    
+
     // Set user property
     public void SetUserProperty(string propertyName, string propertyValue)
     {
         if (!isInitialized) return;
-        
+
         FirebaseAnalytics.SetUserProperty(propertyName, propertyValue);
     }
-    
+
     // Set user ID
     public void SetUserId(string userId)
     {
         if (!isInitialized) return;
-        
+
         FirebaseAnalytics.SetUserId(userId);
     }
 }
@@ -1063,32 +1070,32 @@ using System;
 public class AdMobManager : MonoBehaviour
 {
     public static AdMobManager Instance;
-    
+
     [Header("Ad Unit IDs")]
     [SerializeField] private string appId = "ca-app-pub-XXXXXXXXXXXXXXXX~XXXXXXXXXX";
     [SerializeField] private string bannerAdUnitId = "ca-app-pub-XXXXXXXXXXXXXXXX/XXXXXXXXXX";
     [SerializeField] private string interstitialAdUnitId = "ca-app-pub-XXXXXXXXXXXXXXXX/XXXXXXXXXX";
     [SerializeField] private string rewardedAdUnitId = "ca-app-pub-XXXXXXXXXXXXXXXX/XXXXXXXXXX";
-    
+
     [Header("Ad Settings")]
     [SerializeField] private bool testMode = true; // Bật test mode khi develop
-    
+
     // Test Ad Unit IDs (dùng khi testMode = true)
     private string testBannerId = "ca-app-pub-3940256099942544/6300978111";
     private string testInterstitialId = "ca-app-pub-3940256099942544/1033173712";
     private string testRewardedId = "ca-app-pub-3940256099942544/5224354917";
-    
+
     // Ad objects
     private BannerView bannerView;
     private InterstitialAd interstitialAd;
     private RewardedAd rewardedAd;
-    
+
     // Events
     public event Action OnRewardedAdEarnedReward;
     public event Action OnInterstitialAdClosed;
-    
+
     private bool isInitialized = false;
-    
+
     void Awake()
     {
         if (Instance == null)
@@ -1101,47 +1108,47 @@ public class AdMobManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    
+
     void Start()
     {
         InitializeAds();
     }
-    
+
     void InitializeAds()
     {
         // Khởi tạo Mobile Ads SDK
         MobileAds.Initialize(initStatus => {
             isInitialized = true;
             Debug.Log("AdMob initialized successfully!");
-            
+
             // Load ads sau khi khởi tạo
             LoadBannerAd();
             LoadInterstitialAd();
             LoadRewardedAd();
         });
     }
-    
+
     #region Banner Ad
-    
+
     public void LoadBannerAd()
     {
         // Tạo banner ad request
         AdRequest request = new AdRequest();
-        
+
         // Sử dụng test ID nếu ở test mode
         string adUnitId = testMode ? testBannerId : bannerAdUnitId;
-        
+
         // Tạo banner view
         bannerView = new BannerView(adUnitId, AdSize.Banner, AdPosition.Bottom);
-        
+
         // Đăng ký events
         bannerView.OnBannerAdLoaded += OnBannerAdLoaded;
         bannerView.OnBannerAdLoadFailed += OnBannerAdLoadFailed;
-        
+
         // Load ad
         bannerView.LoadAd(request);
     }
-    
+
     public void ShowBannerAd()
     {
         if (bannerView != null)
@@ -1149,7 +1156,7 @@ public class AdMobManager : MonoBehaviour
             bannerView.Show();
         }
     }
-    
+
     public void HideBannerAd()
     {
         if (bannerView != null)
@@ -1157,29 +1164,29 @@ public class AdMobManager : MonoBehaviour
             bannerView.Hide();
         }
     }
-    
+
     void OnBannerAdLoaded()
     {
         Debug.Log("Banner ad loaded successfully!");
     }
-    
+
     void OnBannerAdLoadFailed(LoadAdError error)
     {
         Debug.LogError($"Banner ad failed to load: {error.GetMessage()}");
     }
-    
+
     #endregion
-    
+
     #region Interstitial Ad
-    
+
     public void LoadInterstitialAd()
     {
         // Tạo interstitial ad request
         AdRequest request = new AdRequest();
-        
+
         // Sử dụng test ID nếu ở test mode
         string adUnitId = testMode ? testInterstitialId : interstitialAdUnitId;
-        
+
         // Load interstitial ad
         InterstitialAd.Load(adUnitId, request, (InterstitialAd ad, LoadAdError error) =>
         {
@@ -1188,16 +1195,16 @@ public class AdMobManager : MonoBehaviour
                 Debug.LogError($"Interstitial ad failed to load: {error?.GetMessage()}");
                 return;
             }
-            
+
             interstitialAd = ad;
             Debug.Log("Interstitial ad loaded successfully!");
-            
+
             // Đăng ký events
             interstitialAd.OnAdFullScreenContentClosed += OnInterstitialAdClosed;
             interstitialAd.OnAdFullScreenContentFailed += OnInterstitialAdFailed;
         });
     }
-    
+
     public void ShowInterstitialAd()
     {
         if (interstitialAd != null && interstitialAd.CanShowAd())
@@ -1211,35 +1218,35 @@ public class AdMobManager : MonoBehaviour
             LoadInterstitialAd();
         }
     }
-    
+
     void OnInterstitialAdClosed()
     {
         Debug.Log("Interstitial ad closed!");
         OnInterstitialAdClosed?.Invoke();
-        
+
         // Load lại ad mới
         LoadInterstitialAd();
     }
-    
+
     void OnInterstitialAdFailed(AdError error)
     {
         Debug.LogError($"Interstitial ad failed: {error.GetMessage()}");
         // Load lại ad mới
         LoadInterstitialAd();
     }
-    
+
     #endregion
-    
+
     #region Rewarded Ad
-    
+
     public void LoadRewardedAd()
     {
         // Tạo rewarded ad request
         AdRequest request = new AdRequest();
-        
+
         // Sử dụng test ID nếu ở test mode
         string adUnitId = testMode ? testRewardedId : rewardedAdUnitId;
-        
+
         // Load rewarded ad
         RewardedAd.Load(adUnitId, request, (RewardedAd ad, LoadAdError error) =>
         {
@@ -1248,23 +1255,23 @@ public class AdMobManager : MonoBehaviour
                 Debug.LogError($"Rewarded ad failed to load: {error?.GetMessage()}");
                 return;
             }
-            
+
             rewardedAd = ad;
             Debug.Log("Rewarded ad loaded successfully!");
-            
+
             // Đăng ký events
             rewardedAd.OnAdFullScreenContentClosed += OnRewardedAdClosed;
             rewardedAd.OnAdFullScreenContentFailed += OnRewardedAdFailed;
         });
     }
-    
+
     public void ShowRewardedAd()
     {
         if (rewardedAd != null && rewardedAd.CanShowAd())
         {
             // Đăng ký event nhận reward
             rewardedAd.OnAdPaid += OnRewardedAdEarnedReward;
-            
+
             rewardedAd.Show((Reward reward) =>
             {
                 Debug.Log($"Rewarded ad completed! Reward: {reward.Type} / {reward.Amount}");
@@ -1278,29 +1285,29 @@ public class AdMobManager : MonoBehaviour
             LoadRewardedAd();
         }
     }
-    
+
     public bool IsRewardedAdReady()
     {
         return rewardedAd != null && rewardedAd.CanShowAd();
     }
-    
+
     void OnRewardedAdClosed()
     {
         Debug.Log("Rewarded ad closed!");
-        
+
         // Load lại ad mới
         LoadRewardedAd();
     }
-    
+
     void OnRewardedAdFailed(AdError error)
     {
         Debug.LogError($"Rewarded ad failed: {error.GetMessage()}");
         // Load lại ad mới
         LoadRewardedAd();
     }
-    
+
     #endregion
-    
+
     // Cleanup
     void OnDestroy()
     {
@@ -1308,12 +1315,12 @@ public class AdMobManager : MonoBehaviour
         {
             bannerView.Destroy();
         }
-        
+
         if (interstitialAd != null)
         {
             interstitialAd.Destroy();
         }
-        
+
         if (rewardedAd != null)
         {
             rewardedAd.Destroy();
@@ -1355,7 +1362,7 @@ public void OnGameOver()
 {
     // Hiển thị interstitial ad
     AdMobManager.Instance.ShowInterstitialAd();
-    
+
     // Đăng ký event để load lại scene sau khi ad đóng
     AdMobManager.Instance.OnInterstitialAdClosed += ReloadScene;
 }
@@ -1366,7 +1373,7 @@ public void OnWatchAdForCoinsButtonClick()
     if (AdMobManager.Instance.IsRewardedAdReady())
     {
         AdMobManager.Instance.ShowRewardedAd();
-        
+
         // Đăng ký event để tặng coin
         AdMobManager.Instance.OnRewardedAdEarnedReward += () => {
             PlayerResources.Instance.AddCoins(100);
@@ -1382,12 +1389,12 @@ public void OnWatchAdForCoinsButtonClick()
 
 ### Best Practices:
 
-- ✅ **Test Mode**: Luôn bật test mode khi develop để tránh vi phạm chính sách AdMob
-- ✅ **Preload Ads**: Load ads trước khi cần hiển thị để tránh delay
-- ✅ **Frequency Capping**: Giới hạn số lần hiển thị ad để không làm phiền người chơi
-- ✅ **Rewarded Ad Strategy**: Chỉ hiển thị rewarded ad khi người chơi tự nguyện xem
-- ✅ **Error Handling**: Xử lý lỗi khi ad không load được
-- ✅ **User Experience**: Không hiển thị ad quá thường xuyên, đặc biệt là interstitial
+- **Test Mode**: Luôn bật test mode khi develop để tránh vi phạm chính sách AdMob
+- **Preload Ads**: Load ads trước khi cần hiển thị để tránh delay
+- **Frequency Capping**: Giới hạn số lần hiển thị ad để không làm phiền người chơi
+- **Rewarded Ad Strategy**: Chỉ hiển thị rewarded ad khi người chơi tự nguyện xem
+- **Error Handling**: Xử lý lỗi khi ad không load được
+- **User Experience**: Không hiển thị ad quá thường xuyên, đặc biệt là interstitial
 
 ### Lưu ý quan trọng:
 
@@ -1419,23 +1426,19 @@ Các hệ thống này thường kết hợp với nhau để tạo nên một k
 
 ### Best Practices chung:
 
-- ✅ Sử dụng Singleton cho Manager quan trọng
-- ✅ Sử dụng Events để giảm coupling
-- ✅ Lưu settings vào PlayerPrefs
-- ✅ Sử dụng Object Pooling cho object spawn thường xuyên
-- ✅ Quản lý Audio tập trung
-- ✅ Log Analytics events quan trọng
-- ✅ Tích hợp AdMob để kiếm doanh thu, nhưng không làm phiền trải nghiệm người chơi
+- Sử dụng Singleton cho Manager quan trọng
+- Sử dụng Events để giảm coupling
+- Lưu settings vào PlayerPrefs
+- Sử dụng Object Pooling cho object spawn thường xuyên
+- Quản lý Audio tập trung
+- Log Analytics events quan trọng
+- Tích hợp AdMob để kiếm doanh thu, nhưng không làm phiền trải nghiệm người chơi
 
 ---
 
 ## 📝 Ghi Chú
 
-- Tài liệu này được tạo cho project **GameAttack2D**
 - Các ví dụ code dựa trên cấu trúc hiện tại của project
 - Có thể mở rộng và tùy chỉnh theo nhu cầu cụ thể
 
 ---
-
-**Cập nhật lần cuối**: 2024
-
