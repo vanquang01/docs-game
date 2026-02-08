@@ -27,6 +27,7 @@ Tài liệu này liệt kê tất cả các tính năng và task đã được t
 ## 1. Hệ Thống Quản Lý Game
 
 ### ✅ GameStateManager
+
 - **Singleton Pattern**: Quản lý instance duy nhất của GameStateManager
 - **DontDestroyOnLoad**: Giữ instance qua các scene
 - **Game States**: Quản lý các trạng thái game (MainMenu, Playing, Paused, GameOver, Victory, TimeUp)
@@ -34,12 +35,13 @@ Tài liệu này liệt kê tất cả các tính năng và task đã được t
 - **Time Scale Control**: Tự động dừng/pause game khi cần thiết (Time.timeScale = 0/1)
 - **State Change Prevention**: Không cho phép đổi state nếu state mới giống state hiện tại
 - **HandleState Method**: Xử lý logic khi state thay đổi
-- **Helper Methods**: 
+- **Helper Methods**:
   - `IsPlaying()`: Kiểm tra game có đang chơi không (static method)
   - `IsGameEnded()`: Kiểm tra game đã kết thúc chưa (static method)
 - **CurrentState Property**: Public property để đọc state hiện tại
 
 ### ✅ GameTimerManager
+
 - **Timer System**: Đếm ngược thời gian màn chơi
 - **UI Integration**: Hiển thị timer trên UI (hỗ trợ cả Text và TextMeshPro)
 - **Auto Find UI Text**: Tự động tìm UI Text nếu chưa được gán
@@ -55,6 +57,7 @@ Tài liệu này liệt kê tất cả các tính năng và task đã được t
 - **GameEndUI Integration**: Tích hợp với GameEndUI để hiển thị menu kết thúc
 
 ### ✅ LevelManager
+
 - **Level Unlock System**: Quản lý mở khóa các màn chơi
 - **HashSet Storage**: Sử dụng HashSet để lưu trữ danh sách màn đã unlock (hiệu quả)
 - **Save/Load Progress**: Lưu progress vào PlayerPrefs (dạng string với delimiter)
@@ -72,6 +75,7 @@ Tài liệu này liệt kê tất cả các tính năng và task đã được t
 ## 2. Hệ Thống Camera RTS
 
 ### ✅ RTSCamera
+
 - **Camera Movement**: Di chuyển camera bằng phím mũi tên/WASD (Input.GetAxis)
 - **Zoom System**: Zoom in/out bằng scroll wheel (đã implement, có thể comment/uncomment)
 - **Zoom Limits**: Giới hạn zoom tối đa và tối thiểu
@@ -83,6 +87,7 @@ Tài liệu này liệt kê tất cả các tính năng và task đã được t
 ## 3. Hệ Thống Unit & Combat
 
 ### ✅ UnitCombat
+
 - **Combat System**: Hệ thống chiến đấu cho unit
 - **Attack Range**: Kiểm tra khoảng cách tấn công
 - **Attack Cooldown**: Hệ thống cooldown giữa các lần tấn công
@@ -97,6 +102,7 @@ Tài liệu này liệt kê tất cả các tính năng và task đã được t
 - **Debug Logging**: Hệ thống debug log chi tiết để kiểm tra animation direction
 
 ### ✅ HeroCombat
+
 - **Hero AI**: AI tự động cho hero
 - **Enemy Detection**: Phát hiện enemy trong phạm vi (sử dụng OverlapCircle)
 - **Auto Attack**: Tự động tấn công khi enemy trong tầm
@@ -109,6 +115,7 @@ Tài liệu này liệt kê tất cả các tính năng và task đã được t
 - **Game State Protection**: Dừng mọi hoạt động khi game kết thúc
 
 ### ✅ UnitData
+
 - **Unit Configuration**: Cấu hình dữ liệu unit (tên, cost, prefab)
 - **Serializable**: Có thể cấu hình trong Inspector (System.Serializable attribute)
 - **Unit Name**: Tên unit
@@ -120,6 +127,7 @@ Tài liệu này liệt kê tất cả các tính năng và task đã được t
 ## 4. Hệ Thống Di Chuyển & Điều Khiển
 
 ### ✅ UnitMovement
+
 - **Movement System**: Hệ thống di chuyển unit sử dụng Rigidbody2D
 - **Smooth Movement**: Di chuyển mượt mà với velocity
 - **Rigidbody2D Configuration**: Cấu hình gravity scale = 0, freeze rotation, continuous collision detection, interpolation
@@ -135,6 +143,7 @@ Tài liệu này liệt kê tất cả các tính năng và task đã được t
 - **Stop Moving Methods**: Có cả private và public method để dừng di chuyển
 
 ### ✅ UnitSelection
+
 - **Unit Selection**: Hệ thống chọn unit đơn lẻ
 - **Group Selection**: Hệ thống chọn và điều khiển nhóm unit
 - **Group Move Mode**: Chế độ di chuyển nhóm (click button → click map)
@@ -147,6 +156,7 @@ Tài liệu này liệt kê tất cả các tính năng và task đã được t
 - **Active Group Tracking**: Theo dõi group đang được điều khiển
 
 ### ✅ UnitGroupManager
+
 - **Group Management**: Quản lý các nhóm unit (LinhBo, CungThu, GiaoBinh, etc.)
 - **Dictionary-Based Storage**: Sử dụng Dictionary để quản lý các nhóm hiệu quả
 - **Enum Iteration**: Tự động khởi tạo tất cả groups từ enum
@@ -161,6 +171,7 @@ Tài liệu này liệt kê tất cả các tính năng và task đã được t
 - **Game State Protection**: Chặn di chuyển khi game kết thúc
 
 ### ✅ UnitSelectable
+
 - **Selection Component**: Component để unit có thể được chọn
 - **Visual Selection**: Hiển thị vòng xanh khi được chọn
 - **Collider Management**: Tự động enable/disable collider dựa trên game state
@@ -169,11 +180,13 @@ Tài liệu này liệt kê tất cả các tính năng và task đã được t
 - **Selection Circle**: Quản lý GameObject selection circle
 
 ### ✅ MoveGroupButton
+
 - **UI Button**: Button để kích hoạt chế độ di chuyển nhóm
 - **UnitGroup Assignment**: Gán group cụ thể cho button
 - **Game State Protection**: Chặn khi game kết thúc
 
 ### ✅ UnitIcon
+
 - **Unit Icon UI**: Icon hiển thị unit trên UI
 - **Unit Selection**: Click icon để chọn unit tương ứng
 - **UnitSelectable Reference**: Tham chiếu đến UnitSelectable component
@@ -183,6 +196,7 @@ Tài liệu này liệt kê tất cả các tính năng và task đã được t
 ## 5. Hệ Thống Enemy AI
 
 ### ✅ EnemyAI
+
 - **Enemy Detection**: Phát hiện player trong phạm vi
 - **Auto Movement**: Tự động di chuyển đến player
 - **Auto Attack**: Tự động tấn công khi trong tầm
@@ -193,6 +207,7 @@ Tài liệu này liệt kê tất cả các tính năng và task đã được t
 - **Gizmos Visualization**: Hiển thị tầm phát hiện trong Scene view để debug
 
 ### ✅ EnemySpawner
+
 - **Spawn System**: Hệ thống spawn enemy
 - **Spawn Points**: Spawn tại các điểm được định sẵn (mảng Transform)
 - **Spawn Interval**: Spawn theo khoảng thời gian định kỳ
@@ -206,6 +221,7 @@ Tài liệu này liệt kê tất cả các tính năng và task đã được t
 ## 6. Hệ Thống Health & Damage
 
 ### ✅ Health
+
 - **Health System**: Hệ thống máu cho unit
 - **Max Health**: Máu tối đa có thể cấu hình
 - **Current Health**: Máu hiện tại được quản lý
@@ -215,6 +231,7 @@ Tài liệu này liệt kê tất cả các tính năng và task đã được t
 - **Health Bar Integration**: Tự động cập nhật health bar khi nhận damage
 
 ### ✅ HealthBar
+
 - **Health Bar UI**: Thanh máu hiển thị trên đầu unit
 - **World Space Canvas**: Sử dụng World Space Canvas với scale nhỏ cho 2D
 - **LateUpdate Follow**: Sử dụng LateUpdate để follow unit mượt mà
@@ -228,6 +245,7 @@ Tài liệu này liệt kê tất cả các tính năng và task đã được t
 ## 7. Hệ Thống Tài Nguyên
 
 ### ✅ PlayerResources
+
 - **Gold Management**: Quản lý vàng của player
 - **Spend Gold**: Chi tiêu vàng (với validation - chỉ chi khi đủ vàng)
 - **Add Gold**: Thêm vàng
@@ -236,6 +254,7 @@ Tài liệu này liệt kê tất cả các tính năng và task đã được t
 - **DontDestroyOnLoad**: Giữ instance qua các scene
 
 ### ✅ GoldManager
+
 - **Auto Gold Generation**: Tự động cộng vàng theo khoảng thời gian
 - **Gold Interval**: Khoảng thời gian giữa mỗi lần cộng vàng (có thể cấu hình)
 - **Gold Per Interval**: Số vàng cộng mỗi lần (có thể cấu hình)
@@ -251,6 +270,7 @@ Tài liệu này liệt kê tất cả các tính năng và task đã được t
 ## 8. Hệ Thống Shop & Mua Unit
 
 ### ✅ UnitShop
+
 - **Shop System**: Hệ thống shop mua unit
 - **Available Units Array**: Danh sách unit có thể mua (UnitData array)
 - **Spawn Point**: Vị trí spawn unit sau khi mua
@@ -261,6 +281,7 @@ Tài liệu này liệt kê tất cả các tính năng và task đã được t
 - **Index Validation**: Kiểm tra index hợp lệ trước khi mua
 
 ### ✅ ShopUI
+
 - **Shop UI Panel**: Panel hiển thị shop
 - **Toggle Shop**: Bật/tắt shop panel (toggle active state)
 - **Close Shop**: Đóng shop (set active = false)
@@ -270,6 +291,7 @@ Tài liệu này liệt kê tất cả các tính năng và task đã được t
 ## 9. Hệ Thống Level & Progression
 
 ### ✅ Level System
+
 - **Multiple Levels**: Hỗ trợ nhiều màn chơi (Level 1, 2, 3...)
 - **Scene Management**: Quản lý các scene level
 - **Level Unlock**: Mở khóa màn tiếp theo khi hoàn thành
@@ -277,44 +299,10 @@ Tài liệu này liệt kê tất cả các tính năng và task đã được t
 
 ---
 
-## 15. Hệ Thống Map Level Selection
-
-### ✅ MapLevelSelector
-- **Map Level Selection**: Chọn level trên map (tùy chọn)
-- **Level Layout Types**: Hỗ trợ nhiều kiểu layout (Horizontal, Vertical, Grid, Custom)
-- **Auto Arrange Levels**: Tự động sắp xếp level theo layout type
-- **Custom Position**: Cho phép sắp xếp level thủ công và lưu vị trí
-- **Path Lines**: Hiển thị đường nối giữa các level (với màu khác nhau cho unlock/lock)
-- **Level Button Info**: Component lưu thông tin level (index, number, unlocked)
-- **Save/Load Positions**: Lưu và load vị trí level vào PlayerPrefs
-- **Reset Positions**: Có thể reset tất cả vị trí đã lưu (Context Menu)
-- **Refresh Level Buttons**: Refresh lại danh sách level khi quay lại từ game
-- **Editor Drag Support**: Hỗ trợ kéo thả level trong Editor (với LevelPositionSaver)
-- **Path Line Calculation**: Tự động tính toán vị trí, góc và độ dài đường nối
-- **Unlock/Lock Visual**: Hiển thị trạng thái unlock/lock với màu sắc khác nhau
-
-### ✅ LevelPositionSaver
-- **Position Saving**: Lưu vị trí level vào PlayerPrefs
-- **Editor Only**: Chỉ hoạt động trong Editor (sử dụng #if UNITY_EDITOR)
-- **Auto Save**: Tự động lưu vị trí khi kéo thả trong Editor
-- **OnValidate Integration**: Lưu vị trí khi validate trong Inspector
-- **MapLevelSelector Integration**: Tích hợp với MapLevelSelector để lưu vị trí
-- **Position Tracking**: Theo dõi vị trí cuối cùng để tránh lưu không cần thiết
-
----
-
-### ✅ LevelPositionSaver
-- **Position Saving**: Lưu vị trí level vào PlayerPrefs
-- **Editor Only**: Chỉ hoạt động trong Editor (sử dụng #if UNITY_EDITOR)
-- **Auto Save**: Tự động lưu vị trí khi kéo thả trong Editor
-- **OnValidate Integration**: Lưu vị trí khi validate trong Inspector
-- **MapLevelSelector Integration**: Tích hợp với MapLevelSelector để lưu vị trí
-
----
-
 ## 10. Hệ Thống UI
 
 ### ✅ MainMenuUI
+
 - **Main Menu**: Menu chính của game
 - **Level Selection**: Màn hình chọn level
 - **Level Buttons**: Tạo nút level động
@@ -333,6 +321,7 @@ Tài liệu này liệt kê tất cả các tính năng và task đã được t
 - **Flexible UI**: Hỗ trợ cả Text và TextMeshPro
 
 ### ✅ GameEndUI
+
 - **End Menu**: Menu hiển thị khi game kết thúc
 - **Victory Panel**: Panel hiển thị khi thắng
 - **Defeat Panel**: Panel hiển thị khi thua
@@ -351,6 +340,7 @@ Tài liệu này liệt kê tất cả các tính năng và task đã được t
 ## 11. Hệ Thống Animation
 
 ### ✅ Animation Integration
+
 - **Walking Animation**: Animation đi bộ cho unit
 - **Attack Animation**: Animation tấn công với nhiều hướng
 - **Direction-Based Animation**: Animation thay đổi theo hướng tấn công
@@ -362,6 +352,7 @@ Tài liệu này liệt kê tất cả các tính năng và task đã được t
 ## 12. Hệ Thống Projectile
 
 ### ✅ Projectile
+
 - **Projectile System**: Hệ thống đạn/mũi tên
 - **Homing Missile**: Tự động bay đến target
 - **Damage System**: Gây damage khi trúng target
@@ -377,6 +368,7 @@ Tài liệu này liệt kê tất cả các tính năng và task đã được t
 ## 13. Hệ Thống Tower
 
 ### ✅ TowerCombat
+
 - **Tower AI**: AI tự động cho tower/tháp
 - **Detection Range**: Tầm phát hiện enemy có thể cấu hình (thường xa hơn unit)
 - **Scan Interval**: Quét enemy theo khoảng thời gian để tối ưu hiệu năng (không quét mỗi frame)
@@ -391,20 +383,61 @@ Tài liệu này liệt kê tất cả các tính năng và task đã được t
 ## 14. Hệ Thống Enum & Constants
 
 ### ✅ GameState Enum
+
 - **Game States**: Định nghĩa các trạng thái game (MainMenu, Playing, Paused, GameOver, Victory, TimeUp)
 - **Type Safety**: Sử dụng enum thay vì string để tránh lỗi typo
 - **State Management**: Hỗ trợ GameStateManager quản lý trạng thái game
 
 ### ✅ UnitGroup Enum
+
 - **Unit Groups**: Định nghĩa các nhóm unit (LinhBo, CungThu, GiaoBinh, CungThuHoangGia, NongDan, KyBinh, YTa)
 - **Group Management**: Hỗ trợ UnitGroupManager phân loại và quản lý unit
 - **Type Safety**: Sử dụng enum để đảm bảo tính nhất quán trong code
 
 ---
 
+## 15. Hệ Thống Map Level Selection
+
+### ✅ MapLevelSelector
+
+- **Map Level Selection**: Chọn level trên map (tùy chọn)
+- **Level Layout Types**: Hỗ trợ nhiều kiểu layout (Horizontal, Vertical, Grid, Custom)
+- **Auto Arrange Levels**: Tự động sắp xếp level theo layout type
+- **Custom Position**: Cho phép sắp xếp level thủ công và lưu vị trí
+- **Path Lines**: Hiển thị đường nối giữa các level (với màu khác nhau cho unlock/lock)
+- **Level Button Info**: Component lưu thông tin level (index, number, unlocked)
+- **Save/Load Positions**: Lưu và load vị trí level vào PlayerPrefs
+- **Reset Positions**: Có thể reset tất cả vị trí đã lưu (Context Menu)
+- **Refresh Level Buttons**: Refresh lại danh sách level khi quay lại từ game
+- **Editor Drag Support**: Hỗ trợ kéo thả level trong Editor (với LevelPositionSaver)
+- **Path Line Calculation**: Tự động tính toán vị trí, góc và độ dài đường nối
+- **Unlock/Lock Visual**: Hiển thị trạng thái unlock/lock với màu sắc khác nhau
+
+### ✅ LevelPositionSaver
+
+- **Position Saving**: Lưu vị trí level vào PlayerPrefs
+- **Editor Only**: Chỉ hoạt động trong Editor (sử dụng #if UNITY_EDITOR)
+- **Auto Save**: Tự động lưu vị trí khi kéo thả trong Editor
+- **OnValidate Integration**: Lưu vị trí khi validate trong Inspector
+- **MapLevelSelector Integration**: Tích hợp với MapLevelSelector để lưu vị trí
+- **Position Tracking**: Theo dõi vị trí cuối cùng để tránh lưu không cần thiết
+
+---
+
+### ✅ LevelPositionSaver
+
+- **Position Saving**: Lưu vị trí level vào PlayerPrefs
+- **Editor Only**: Chỉ hoạt động trong Editor (sử dụng #if UNITY_EDITOR)
+- **Auto Save**: Tự động lưu vị trí khi kéo thả trong Editor
+- **OnValidate Integration**: Lưu vị trí khi validate trong Inspector
+- **MapLevelSelector Integration**: Tích hợp với MapLevelSelector để lưu vị trí
+
+---
+
 ## 📊 Tổng Kết
 
 ### Các Hệ Thống Chính Đã Hoàn Thành:
+
 1. ✅ **Game State Management** - Quản lý trạng thái game
 2. ✅ **Camera RTS** - Camera di chuyển và zoom
 3. ✅ **Unit System** - Hệ thống unit với combat, movement, selection
@@ -424,11 +457,13 @@ Tài liệu này liệt kê tất cả các tính năng và task đã được t
 17. ✅ **Map Level Selection** - Hệ thống chọn level trên map với layout linh hoạt
 
 ### Các Design Patterns Đã Sử Dụng:
+
 - ✅ **Singleton Pattern**: GameStateManager, LevelManager, PlayerResources, UnitGroupManager, UnitSelection
 - ✅ **Event System**: Giao tiếp giữa các component
 - ✅ **Component-Based Architecture**: Tách biệt các chức năng thành component riêng
 
 ### Các Tính Năng Nổi Bật:
+
 - ✅ **Group Movement**: Điều khiển nhóm unit cùng lúc
 - ✅ **Direction-Based Combat**: Combat thay đổi theo hướng
 - ✅ **Tower Defense**: Hệ thống tower tự động phát hiện và tấn công enemy
@@ -452,4 +487,3 @@ Tài liệu này liệt kê tất cả các tính năng và task đã được t
 
 **Ngày tạo**: $(date)
 **Phiên bản**: 1.0
-
